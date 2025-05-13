@@ -1,0 +1,6 @@
+@Axity.Users.Api_HostAddress = http://localhost:5077
+
+GET {{Axity.Users.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

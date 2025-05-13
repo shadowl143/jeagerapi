@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:14837",
+      "sslPort": 44353
+    }
+  },
+  "profiles": {
+    "Axity.Users.Dev": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "SEQ_LOG_LEVEL": "Information",
+        "ConnectionStrings__DatabaseContext": "Server=LAPTOP-C0J1I6CB\\SQLEXPRESS;Database=Test;user id=Axity;password=Axity2023;Encrypt=True;TrustServerCertificate=True;",
+        "ApplicationName": "user-service",
+        "NombreJager": "http://localhost:4317",
+        "NombreLoki": "http://localhost:3100"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5077"
+    },
+    "Axity.Users.QA": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "SEQ_LOG_LEVEL": "Information",
+        "ConnectionStrings__DatabaseContext": "Server=.;Database=AxityTest;user id=sa;password=root;MultipleActiveResultSets=True;Connection Timeout=5;"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5077"
+      },
+      "Axity.Users.PROD": {
+        "commandName": "Project",
+        "launchBrowser": true,
+        "launchUrl": "swagger",
+        "environmentVariables": {
+          "SEQ_LOG_LEVEL": "Information",
+          "ConnectionStrings__DatabaseContext": "Server=.;Database=AxityTest;user id=sa;password=root;MultipleActiveResultSets=True;Connection Timeout=5;"
+        },
+        "dotnetRunMessages": true,
+        "applicationUrl": "http://localhost:5077"
+      }
+    }
+}
