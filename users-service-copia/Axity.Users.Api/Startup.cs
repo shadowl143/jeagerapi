@@ -58,7 +58,6 @@ namespace Axity.Users.Api
                 .Destructure.ToMaximumCollectionCount(16)
                 .Destructure.ToMaximumStringLength(50)
                 .Destructure.ToMaximumDepth(5)
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] - {Message:lj}{NewLine} {Exception}")
                 .WriteTo.File("Logs/log-.txt", outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] - {Message:lj}{NewLine} {Exception}", rollingInterval: RollingInterval.Day);
 
             Log.Logger = loggerConfiguration.CreateLogger();
@@ -84,7 +83,6 @@ namespace Axity.Users.Api
                     },
                 });
             });
-            Log.Logger.Information("Este valor puede contener un  dato {0}",  this.Configuration.GetSection("NombreJaeger").Value?.ToString());
             services.AddOpenTelemetry()
             .WithTracing(builder => builder
                 .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(this.Configuration.GetSection("ApplicationName").Value?.ToString() ?? "api-service"))
@@ -92,8 +90,8 @@ namespace Axity.Users.Api
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
                 {
-                    options.Endpoint = new Uri(this.Configuration.GetSection("NombreJaeger").Value?.ToString()); // Jaeger OTLP endpoint
-                    options.Endpoint = new Uri(this.Configuration.GetSection("NombreJaeger").Value?.ToString()); // Jaeger OTLP endpoint
+                    options.Endpoint = new Uri(this.Configuration.GetSection("NombreJaeger").Value?.ToString() ?? "http://localhost:4317"); // Jaeger OTLP endpoint
+                    options.Endpoint = new Uri(this.Configuration.GetSection("NombreJaeger").Value?.ToString() ?? "http://loki:3100"); // Jaeger OTLP endpoint
                 }));
             this.AddRedis(services, Log.Logger);
             services.AddDependicyInjection();

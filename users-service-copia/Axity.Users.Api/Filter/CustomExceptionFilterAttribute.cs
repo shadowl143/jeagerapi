@@ -51,7 +51,6 @@ namespace Axity.Users.Api.Filter
         /// <param name="context">OnException.</param>
         public override void OnException(ExceptionContext context)
         {
-            LogErrorSequence(context, this.logger);
             var exception = context.Exception;
             HttpStatusCode status = HttpStatusCode.InternalServerError;
             string message = "Servicio no disponible. Intente más tarde o contacte al administrador.";
@@ -72,24 +71,6 @@ namespace Axity.Users.Api.Filter
 
             // Generamos la respuesta JSON
             this.BuildErrorResponse(context, status, message, messageError);
-        }
-
-        /// <summary>
-        /// Ajustes en los logs error.
-        /// </summary>
-        /// <param name="context">ExceptionContext context.</param>
-        /// <param name="logger">ILogger logger.</param>
-#pragma warning disable SA1204 // Static elements should appear before instance elements
-        public static void LogErrorSequence(ExceptionContext context, ILogger logger)
-#pragma warning restore SA1204 // Static elements should appear before instance elements
-        {
-            logger.Error("El path  al que se accedio fue {Path}", context.HttpContext.Request.Path);
-            logger.Error("El metodo al que se accedio es {Method}", context.HttpContext.Request.Method);
-            logger.Error("El Template al que se accedio es {Template}", context.ActionDescriptor.AttributeRouteInfo.Template);
-            logger.Error("El Id al que se accedio es {Id}", context.ActionDescriptor.Id);
-            logger.Error("El error de exception fue {Message}", context.Exception.Message);
-            logger.Error("El TraceIdentifier al que se accedio es {TraceIdentifier}", context.HttpContext.TraceIdentifier);
-            logger.Error(context.Exception, "Error");
         }
 
         private void HandleSpecificExceptionTypes(Exception exception, ref int codeError, ref string messageError)

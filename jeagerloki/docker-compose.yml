@@ -1,8 +1,10 @@
-version: '3.8'
+version: '1.0'
 
 services:
   grafana:
     image: grafana/grafana:latest
+    networks:
+      - red_logger
     ports:
       - "3000:3000"
     environment:
@@ -10,18 +12,23 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./visualizador/datasource:/etc/grafana/provisioning/datasources
     depends_on:
       - loki
       - jaeger
 
   loki:
     image: grafana/loki:2.9.3
+    networks:
+      - red_logger
     ports:
       - "3100:3100"
     command: -config.file=/etc/loki/local-config.yaml
 
   promtail:
     image: grafana/promtail:2.9.3
+    networks:
+      - red_logger
     volumes:
       - /var/log:/var/log
       - ./promtail-config.yml:/etc/promtail/config.yml
@@ -31,12 +38,69 @@ services:
 
   jaeger:
     image: jaegertracing/all-in-one:1.56
+    networks:
+      - red_logger
     ports:
       - "16686:16686"  # UI
       - "6831:6831/udp" # Agent UDP
       - "4317:4317"     # OTLP gRPC
     environment:
       - COLLECTOR_OTLP_ENABLED=true
+  
+  sqlserver:
+    build: 
+      context: ../sql
+    image: sql_server_1
+    networks:
+      - red_logger
+    ports:
+      - "1434:1433"
+    environment:
+      - SA_PASSWORD=TuPasswordFuerte123
+      - ACCEPT_EULA=Y
+
+  user-service-1:
+    build: 
+      context: ../users-service
+    image: user_service_1
+    networks:
+      - red_logger
+    ports:
+      - "5000:8080"
+    depends_on:
+      - sqlserver
+      - loki
+      - jaeger
+    environment:
+      - SEQ_LOG_LEVEL=Information
+      - ConnectionStrings__DatabaseContext=Server=sqlserver,1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
+      - ApplicationName=user-service-1
+      - NombreJaeger=http://jaeger:4317
+      - NombreLoki=http://loki:3100
+
+  user-service-2:
+    build: 
+      context: ../users-service-copia
+    image: user_service_2
+    networks:
+      - red_logger
+    ports:
+      - "5001:8080"
+    depends_on:
+      - sqlserver
+      - loki
+      - jaeger
+    environment:
+      - SEQ_LOG_LEVEL=Information
+      - ConnectionStrings__DatabaseContext=Server=sqlserver,1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
+      - ApplicationName=user-service-2
+      - NombreJaeger=http://jaeger:4317
+      - NombreLoki=http://loki:3100
+
+networks:
+  red_logger:
+    name: mi_red_jaeger
+    driver: bridge   
 
 volumes:
   grafana-storage:

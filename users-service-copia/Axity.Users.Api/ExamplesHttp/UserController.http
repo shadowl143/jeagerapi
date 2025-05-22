@@ -1,0 +1,41 @@
+@Axity.Users.Api_HostAddress = http://localhost:5077
+
+###
+# @name GetAll
+GET {{Axity.Users.Api_HostAddress}}/user?page=1&size=10
+
+###
+# @name GetById
+GET {{Axity.Users.Api_HostAddress}}/user/GetById/1/id
+
+###
+# @name Create
+POST {{Axity.Users.Api_HostAddress}}/user
+Content-Type: application/json
+
+{
+  "name": "user 1",
+  "surName": "user 1",
+  "age": 18
+}
+
+###
+# @name Update
+PUT {{Axity.Users.Api_HostAddress}}/user
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "update 1",
+  "surName": "update 1",
+  "age": 20,
+  "status": false
+}
+
+
+###
+# @name Delete
+DELETE {{Axity.Users.Api_HostAddress}}/user
+Content-Type: application/json
+
+1
