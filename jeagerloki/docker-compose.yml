@@ -73,7 +73,7 @@ services:
       - jaeger
     environment:
       - SEQ_LOG_LEVEL=Information
-      - ConnectionStrings__DatabaseContext=Server=sqlserver,1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
+      - ConnectionStrings__DatabaseContext=Server=sqlserver:1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
       - ApplicationName=user-service-1
       - NombreJaeger=http://jaeger:4317
       - NombreLoki=http://loki:3100
@@ -92,7 +92,7 @@ services:
       - jaeger
     environment:
       - SEQ_LOG_LEVEL=Information
-      - ConnectionStrings__DatabaseContext=Server=sqlserver,1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
+      - ConnectionStrings__DatabaseContext=Server=sqlserver:1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
       - ApplicationName=user-service-2
       - NombreJaeger=http://jaeger:4317
       - NombreLoki=http://loki:3100

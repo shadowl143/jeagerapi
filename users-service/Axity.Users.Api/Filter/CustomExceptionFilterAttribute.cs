@@ -85,8 +85,8 @@ namespace Axity.Users.Api.Filter
         {
             logger.Error("El path  al que se accedio fue {Path}", context.HttpContext.Request.Path);
             logger.Error("El metodo al que se accedio es {Method}", context.HttpContext.Request.Method);
-            logger.Error("El Template al que se accedio es {Template}", context.ActionDescriptor.AttributeRouteInfo.Template);
-            logger.Error("El Id al que se accedio es {Id}", context.ActionDescriptor.Id);
+            logger.Error("El Template al que se accedio es {Template}", context.ActionDescriptor?.AttributeRouteInfo?.Template);
+            logger.Error("El Id al que se accedio es {Id}", context.ActionDescriptor?.Id);
             logger.Error("El error de exception fue {Message}", context.Exception.Message);
             logger.Error("El TraceIdentifier al que se accedio es {TraceIdentifier}", context.HttpContext.TraceIdentifier);
             logger.Error(context.Exception, "Error");
