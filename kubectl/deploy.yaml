@@ -1,0 +1,270 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http-grafana
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /robots.txt
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3000
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 250m
+              memory: 750Mi
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-pv
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: http-grafana
+  selector:
+    app: grafana
+  sessionAffinity: None
+  type: LoadBalancer
+ 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jaeger
+  name: jaeger
+spec:
+  selector:
+    matchLabels:
+      app: jaeger
+  template:
+    metadata:
+      labels:
+        app: jaeger
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: jaeger
+          image: jaegertracing/all-in-one:1.56
+          envFrom:
+            - configMapRef:
+                name: jaeger-config
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 16686
+              name: jaeger-ui
+            - containerPort: 6831
+              name: jaeger-udp
+            - containerPort: 4317
+              name: jaeger-grpc
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              name: grafana-pv
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+spec:
+  ports:
+    - port: 4317
+      protocol: TCP
+      targetPort: jaeger-grpc
+  selector:
+    app: jaeger
+  sessionAffinity: None
+  type: LoadBalancer
+ 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sql-server
+  name: sql-server
+spec:
+  selector:
+    matchLabels:
+      app: sql-server
+  template:
+    metadata:
+      labels:
+        app: sql-server
+    spec:
+      containers:
+        - name: sql-server
+          image: sql-server:latest
+      env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: "TuPasswordSegura123!"
+          ports:
+            - containerPort: 1434
+              name: sql-server-port
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sql-server
+spec:
+  ports:
+    - port: 1434
+      targetPort: sql-server-port
+  selector:
+    app: sql-server
+  sessionAffinity: None
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-service-1
+  name: user-service-1
+spec:
+  selector:
+    matchLabels:
+      app: user-service-1
+  template:
+    metadata:
+      labels:
+        app: user-service-1
+    spec:
+      containers:
+        - name: user-service-1
+          image: user-service-1:latest
+          envFrom:
+            - configMapRef:
+                name: user-1-config
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+              name: user-port
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-1
+spec:
+  ports:
+    - port: 5000
+      targetPort: user-port
+  selector:
+    app: user-service-1
+  sessionAffinity: None
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: user-service-2
+  name: user-service-2
+spec:
+  selector:
+    matchLabels:
+      app: user-service-2
+  template:
+    metadata:
+      labels:
+        app: user-service-2
+    spec:
+      containers:
+        - name: user-service-2
+          image: user-service-2:latest
+          envFrom:
+            - configMapRef:
+                name: user-2-config
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5001
+              name: user-2-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service-2
+spec:
+  ports:
+    - port: 5001
+      targetPort: user-2-port
+  selector:
+    app: user-service-2
+  sessionAffinity: None
+  type: LoadBalancer
+ 
