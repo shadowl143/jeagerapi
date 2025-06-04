@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/mssql/server:2022-latest
+FROM mcr.microsoft.com/mssql/server
 
 EXPOSE 1433
-    
+
 # Copiar el script al contenedor
 COPY init.sql /init.sql
 

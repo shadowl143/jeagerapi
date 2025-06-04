@@ -1,1 +1,11 @@
-GET http://localhost:5000/user?page=1&size=10 HTTP/1.1
+@urlkbct = http://localhost
+
+###
+GET {{urlkbct}}/user?page=1&size=10
+
+
+###
+GET {{urlkbct}}/user/1/id HTTP/1.1
+
+###
+GET http://localhost/user?page=1&size=10 HTTP/1.1

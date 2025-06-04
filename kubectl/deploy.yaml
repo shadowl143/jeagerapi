@@ -10,17 +10,6 @@ spec:
     requests:
       storage: 1Gi
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: grafana-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -72,12 +61,12 @@ spec:
               memory: 750Mi
           volumeMounts:
             - mountPath: /var/lib/grafana
-              name: grafana-pv
+              name: grafana-pvc
       volumes:
-        - name: grafana-pv
+        - name: grafana-pvc
           persistentVolumeClaim:
             claimName: grafana-pvc
-
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -126,28 +115,35 @@ spec:
               name: jaeger-udp
             - containerPort: 4317
               name: jaeger-grpc
+          env:
+            - name: COLLECTOR_OTLP_ENABLED
+              value: "true"
+            - name: COLLECTOR_OTLP_GRPC_PORT
+              value: "4317"
           volumeMounts:
             - mountPath: /var/lib/grafana
-              name: grafana-pv
+              name: grafana-pvc
       volumes:
-        - name: grafana-pv
+        - name: grafana-pvc
           persistentVolumeClaim:
             claimName: grafana-pvc
-
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: jaeger
 spec:
   ports:
-    - port: 4317
-      protocol: TCP
+    - name: jaeger-ui
+      port: 16686
+      targetPort: jaeger-ui
+    - name: otlp-grpc
+      port: 4317
       targetPort: jaeger-grpc
   selector:
     app: jaeger
   sessionAffinity: None
   type: LoadBalancer
- 
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -166,23 +162,23 @@ spec:
     spec:
       containers:
         - name: sql-server
-          image: sql-server:latest
-      env:
-        - name: ACCEPT_EULA
-          value: "Y"
-        - name: SA_PASSWORD
-          value: "TuPasswordSegura123!"
+          image: shadowlcode/sql-server
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              value: "TuPasswordSegura123!"
           ports:
-            - containerPort: 1434
+            - containerPort: 1433
               name: sql-server-port
-
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: sql-server
 spec:
   ports:
-    - port: 1434
+    - port: 1433
       targetPort: sql-server-port
   selector:
     app: sql-server
@@ -212,16 +208,16 @@ spec:
                 name: user-1-config
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
               name: user-port
-
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: user-service-1
 spec:
   ports:
-    - port: 5000
+    - port: 8080
       targetPort: user-port
   selector:
     app: user-service-1
