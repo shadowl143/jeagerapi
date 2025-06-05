@@ -118,7 +118,7 @@ namespace Axity.Users.Api.Filter
                 // Caso por defecto si la excepción no está en el mapeo
                 this.logger.Error(exception, "Error desconocido.");
                 var encryptedError = Encoding.UTF8.GetBytes(exception.Message);
-                messageError = Convert.ToBase64String(encryptedError);
+                messageError = exception.Message;
             }
         }
 

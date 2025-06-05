@@ -7,5 +7,28 @@ GET {{urlkbct}}/user?page=1&size=10
 ###
 GET {{urlkbct}}/user/1/id HTTP/1.1
 
+
 ###
-GET http://localhost/user?page=1&size=10 HTTP/1.1
+# @name Create
+POST {{urlkbct}}/user
+Content-Type: application/json
+
+{
+  "name": "user 1",
+  "surName": "user 1",
+  "age": 18
+}
+
+###
+# @name Update
+PUT {{urlkbct}}/user
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "update 1",
+  "surName": "update 1",
+  "age": 20,
+  "status": false
+}
+
