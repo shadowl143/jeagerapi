@@ -166,6 +166,8 @@ spec:
           env:
             - name: ACCEPT_EULA
               value: "Y"
+            - name: MSSQL_PID
+              value: "Express"
             - name: SA_PASSWORD
               value: "TuPasswordSegura123!"
           ports:
@@ -177,11 +179,11 @@ kind: Service
 metadata:
   name: sql-server
 spec:
-  ports:
-    - port: 1433
-      targetPort: sql-server-port
   selector:
     app: sql-server
+  ports:
+    - port: 1433
+      targetPort: 1433
   sessionAffinity: None
   type: LoadBalancer
 ---

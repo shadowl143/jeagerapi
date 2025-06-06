@@ -28,7 +28,7 @@ metadata:
   name: user-1-config
 data:
   SEQ_LOG_LEVEL: Information
-  ConnectionStrings__DatabaseContext: Server=sqlserver:1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
+  ConnectionStrings__DatabaseContext: Server=sql-server,1433;Database=Test;user id=sa;password=TuPasswordSegura123!;Encrypt=True;TrustServerCertificate=True;
   ApplicationName: user-service-1
   NombreJaeger: http://jaeger:4317
 ---
@@ -39,7 +39,7 @@ metadata:
   name: user-2-config
 data:
   SEQ_LOG_LEVEL: Information
-  ConnectionStrings__DatabaseContext: Server=sqlserver:1434;Database=Test;user id=sa;password=TuPasswordFuerte123;Encrypt=True;TrustServerCertificate=True;
+  ConnectionStrings__DatabaseContext: Server=sql-server:1433;Database=Test;user id=sa;password=TuPasswordSegura123!;Encrypt=True;TrustServerCertificate=True;
   ApplicationName: user-service-2
   NombreJaeger: http://jaeger:4317
 ---

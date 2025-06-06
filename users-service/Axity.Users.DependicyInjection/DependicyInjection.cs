@@ -19,6 +19,7 @@ namespace Axity.Users.DependicyInjection
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Serilog;
 
     /// <summary>
     /// Dependicy Injection.
@@ -44,10 +45,11 @@ namespace Axity.Users.DependicyInjection
         /// Method to add Db Context.
         /// </summary>
         /// <param name="services">IServiceCollection services.</param>
+        /// <param name="logger">ILogger logger.</param>
         /// <param name="configuration">Configuration Options.</param>
-        public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDbContext(this IServiceCollection services, ILogger logger, IConfiguration configuration)
         {
-            var a = configuration.GetConnectionString(nameof(DatabaseContext));
+            logger.Information("La cadena de conexion es {0}", configuration.GetConnectionString(nameof(DatabaseContext)));
             services.AddDbContextPool<DatabaseContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString(nameof(DatabaseContext)));

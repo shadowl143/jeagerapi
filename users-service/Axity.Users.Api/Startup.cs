@@ -98,7 +98,7 @@ namespace Axity.Users.Api
             this.AddRedis(services, Log.Logger);
             services.AddDependicyInjection();
             services.AddAutoMapper();
-            services.AddDbContext(this.Configuration);
+            services.AddDbContext(Log.Logger, this.Configuration);
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
