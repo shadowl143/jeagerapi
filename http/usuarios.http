@@ -1,4 +1,4 @@
-@urlkbct = http://localhost
+@urlkbct = http://localhost:8080
 
 ###
 GET {{urlkbct}}/user?page=1&size=10

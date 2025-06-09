@@ -20,7 +20,7 @@ spec:
                 name: user-service-1
                 port:
                   number: 8080
-            path: /service1
+            path: /
             pathType: Prefix
     - http:
         paths:
@@ -29,6 +29,6 @@ spec:
                 name: user-service-2
                 port:
                   number: 8082
-            path: /service2
+            path: /
             pathType: Prefix
   ingressClassName: nginx
