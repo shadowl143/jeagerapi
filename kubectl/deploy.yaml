@@ -250,7 +250,7 @@ spec:
                 name: user-2-config
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 5001
+            - containerPort: 8082
               name: user-2-port
 ---
 apiVersion: v1
@@ -259,7 +259,7 @@ metadata:
   name: user-service-2
 spec:
   ports:
-    - port: 5001
+    - port: 8082
       targetPort: user-2-port
   selector:
     app: user-service-2

@@ -20,6 +20,15 @@ spec:
                 name: user-service-1
                 port:
                   number: 8080
-            path: /
+            path: /service1
+            pathType: Prefix
+    - http:
+        paths:
+          - backend:
+              service:
+                name: user-service-2
+                port:
+                  number: 8082
+            path: /service2
             pathType: Prefix
   ingressClassName: nginx
