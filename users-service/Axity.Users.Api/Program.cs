@@ -9,6 +9,8 @@
 namespace Axity.Users.Api
 {
     using Axity.Users.Api;
+    using Axity.Users.Entities.Context;
+    using Microsoft.EntityFrameworkCore;
 
     /// <summary>
     /// program.
@@ -28,6 +30,14 @@ namespace Axity.Users.Api
             startup.ConfigureServices(builder.Services);
 
             var app = builder.Build();
+
+            // Automáticamente crear la base de datos / aplicar migraciones:
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                context.Database.Migrate();
+            }
+
             startup.Configure(app);
 
             app.Run();

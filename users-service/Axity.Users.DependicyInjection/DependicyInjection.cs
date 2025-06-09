@@ -50,6 +50,7 @@ namespace Axity.Users.DependicyInjection
         public static void AddDbContext(this IServiceCollection services, ILogger logger, IConfiguration configuration)
         {
             logger.Information("La cadena de conexion es {0}", configuration.GetConnectionString(nameof(DatabaseContext)));
+            Console.WriteLine("La cadena de conexion es {0}", configuration.GetConnectionString(nameof(DatabaseContext)));
             services.AddDbContextPool<DatabaseContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString(nameof(DatabaseContext)));
@@ -62,6 +63,7 @@ namespace Axity.Users.DependicyInjection
         /// <param name="services">IServiceCollection services.</param>
         public static void AddAutoMapper(this IServiceCollection services)
         {
+
             var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new AutoMapperProfile()); });
             services.AddSingleton(mappingConfig.CreateMapper());
         }

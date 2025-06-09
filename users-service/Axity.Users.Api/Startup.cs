@@ -8,19 +8,20 @@
 
 namespace Axity.Users.Api
 {
+    using System.Diagnostics;
     using Axity.Users.Api.Filter;
     using Axity.Users.DependicyInjection;
+    using Axity.Users.Entities.Context;
     using Axity.Users.Resources.Util;
     using Company.Proyect.Api.Filter;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
-    using OpenTelemetry;
     using OpenTelemetry.Resources;
     using OpenTelemetry.Trace;
     using Serilog;
     using Serilog.Context;
     using Serilog.Events;
     using StackExchange.Redis;
-    using System.Diagnostics;
 
     /// <summary>
     /// Startup.
@@ -92,7 +93,6 @@ namespace Axity.Users.Api
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
                 {
-                    options.Endpoint = new Uri(this.Configuration.GetSection("NombreJaeger").Value?.ToString()); // Jaeger OTLP endpoint
                     options.Endpoint = new Uri(this.Configuration.GetSection("NombreJaeger").Value?.ToString()); // Jaeger OTLP endpoint
                 }));
             this.AddRedis(services, Log.Logger);
