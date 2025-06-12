@@ -21,7 +21,7 @@
         "NombreLoki": "http://localhost:3100"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5077"
+      "applicationUrl": "http://localhost:5078"
     },
     "Axity.Users.QA": {
       "commandName": "Project",
@@ -32,7 +32,7 @@
         "ConnectionStrings__DatabaseContext": "Server=.;Database=AxityTest;user id=sa;password=root;MultipleActiveResultSets=True;Connection Timeout=5;"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5077"
+      "applicationUrl": "http://localhost:5078"
       },
       "Axity.Users.PROD": {
         "commandName": "Project",

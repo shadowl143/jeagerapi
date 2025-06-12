@@ -12,11 +12,12 @@
     "Axity.Users.Dev": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "index.html",
       "environmentVariables": {
         "SEQ_LOG_LEVEL": "Information",
         "ConnectionStrings__DatabaseContext": "Server=LAPTOP-C0J1I6CB\\SQLEXPRESS;Database=Test;user id=sa;password=root;Encrypt=True;TrustServerCertificate=True;",
         "ApplicationName": "user-service",
+        "UserCopy": "http://localhost:5078",
         "NombreJaeger": "http://localhost:4317",
         "NombreLoki": "http://localhost:3100"
       },

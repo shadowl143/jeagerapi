@@ -13,9 +13,13 @@ namespace Axity.Users.DependicyInjection
     using Axity.Users.Entities.Context;
     using Axity.Users.Facade.User;
     using Axity.Users.Facade.User.Impl;
+    using Axity.Users.Facade.UserCopy;
+    using Axity.Users.Facade.UserCopy.Impl;
     using Axity.Users.Services.Mapping;
     using Axity.Users.Services.User;
     using Axity.Users.Services.User.Impl;
+    using Axity.Users.Services.UserCopy;
+    using Axity.Users.Services.UserCopy.Impl;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +41,8 @@ namespace Axity.Users.DependicyInjection
             services.AddTransient<IUserDao, UserDao>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserFacade, UserFacade>();
+            services.AddTransient<IUserCopyService, UserCopyService>();
+            services.AddTransient<IUserCopyFacade, UserCopyFacade>();
 
             services.AddTransient<IDatabaseContext, DatabaseContext>();
         }

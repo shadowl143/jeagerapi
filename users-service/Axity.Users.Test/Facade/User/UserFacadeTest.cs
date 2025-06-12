@@ -8,7 +8,6 @@
 
 namespace Axity.Users.Test.Facade.User
 {
-    using Azure;
     using Axity.Users.Dtos.Common;
     using Axity.Users.Dtos.User;
     using Axity.Users.Facade.User;

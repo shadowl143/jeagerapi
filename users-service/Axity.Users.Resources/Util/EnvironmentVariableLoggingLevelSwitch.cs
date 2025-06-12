@@ -9,6 +9,7 @@
 namespace Axity.Users.Resources.Util
 {
     using System;
+    using Serilog;
     using Serilog.Core;
     using Serilog.Events;
 
@@ -27,6 +28,20 @@ namespace Axity.Users.Resources.Util
             {
                 this.MinimumLevel = level;
             }
+        }
+
+        /// <summary>
+        /// LogErrorSequenceRequest.
+        /// </summary>
+        /// <param name="response">ExceptionContext context.</param>
+        /// <param name="logger">ILogger logger.</param>
+        public static void LogErrorSequenceRequest(HttpResponseMessage response, ILogger logger)
+        {
+            logger.Error("Se intento la conexión {RequstUri}", response.RequestMessage.RequestUri);
+            logger.Error("El reasion phrase {RequstUri}", response.ReasonPhrase);
+            logger.Error("Fecha de solicitud {Date}", response.Headers.Date);
+            logger.Error("Elstatus code fue {StatusCode}", response.StatusCode);
+            logger.Error("Content string {ContentString}", response.Content.ReadAsStringAsync().Result);
         }
     }
 }
